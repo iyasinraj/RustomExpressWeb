@@ -7,7 +7,7 @@ const Settings = () => {
             <Helmet>
                 <title>Settings || PIPIL</title>
             </Helmet>
-            <h2 className='text-2xl font-bold border-b'>Settings</h2>
+            <h2 className='md:text-2xl font-bold border-b'>Settings</h2>
             <div className='my-6 text-lg font-bold'>
 
                 <div className='grid md:grid-cols-2 gap-4'>

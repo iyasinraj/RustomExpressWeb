@@ -3,6 +3,7 @@ import Navbar from '../components/Shared/Navbar/Navbar';
 import { Outlet } from 'react-router-dom';
 import Footer from '../components/Shared/Footer/Footer';
 import SelectLocatoinModal from '../components/Home/SelectLocation/SelectLocatoinModal';
+import Filter from '../Dashboard/AdsPageLayoutComponents/Filter';
 
 const AdsPageLayout = () => {
     return (
@@ -21,8 +22,8 @@ const AdsPageLayout = () => {
                     </div>
                     <div className='md:flex w-full mx-auto'>
                         <div className=' hidden lg:block md:w-2/12 md:p-2'>
-                            <div>
-                                <p className='text-center'>shorts list</p>
+                            <div className='px-4'>
+                                <Filter></Filter>
                             </div>
                         </div>
                         <div className='md:w-10/12 md:border-s p-4'>

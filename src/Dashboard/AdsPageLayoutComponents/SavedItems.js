@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet-async';
 
 const SavedItems = () => {
     return (
-        <div className='my-10'>
+        <div className=''>
             <Helmet>
                 <title>Saved Items || PIPIL</title>
             </Helmet>
-            <p className='text-2xl font-bold border-b'>Saved Items</p>
+            <p className='md:text-2xl font-bold border-b'>Saved Items</p>
 
             <div className='my-6 grid md:grid-cols-3 gap-6'>
                 <SavedItemCard></SavedItemCard>

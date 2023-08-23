@@ -1,5 +1,5 @@
 import React from 'react';
-import MyAdsCard from './MyAdsCard';
+import MyAdsCard from './AdsPageLayoutComponents/MyAdsCard';
 import { Helmet } from 'react-helmet-async';
 
 const Dashboard = () => {

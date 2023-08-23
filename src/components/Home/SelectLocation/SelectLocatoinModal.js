@@ -1,80 +1,21 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import LocationOptions from "./LocationOptions";
+import { AuthContext } from "../../../context/UserContext";
 
 const SelectLocatoinModal = () => {
-    const [location, setLocatoin] = useState('Location')
-    const [divisions, setDivisions] = useState([])
-    const [divisionId, setDivisionId] = useState()
-    const [selectedDivision, setSelectedDivision] = useState()
-    const [districts, setDistricts] = useState([])
-    const [districtId, setDistrictId] = useState()
-    const [areas, setAreas] = useState([])
-    const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-    </svg>
 
-
-    // division selection part
-    useEffect(() => {
-        const url = ('http://192.168.0.105:5000/bd')
-
-        const fetchData = async () => {
-            const response = await fetch(url)
-            const json = await response.json()
-            setDivisions(json[0].divisions)
-        }
-        fetchData()
-    }, [])
-    const handleChange = (e) => {
-        const value = e.target.value
-        const name = value.split(",")[0]
-        const id = value.split(",")[1]
-        setDivisionId(id)
-        setSelectedDivision(name)
-        setLocatoin(name)
-    }
-
-
-    // district selection part
-    useEffect(() => {
-        const url = (`http://192.168.0.105:5000/bd/${divisionId}`)
-
-        const fetchData = async () => {
-            const response = await fetch(url)
-            const json = await response.json()
-            setDistricts(json)
-        }
-        fetchData()
-    }, [divisionId])
-
-    const handleChangeDis = (e) => {
-        const value = e.target.value
-        const name = value.split(",")[0]
-        const id = value.split(",")[1]
-        setLocatoin(name)
-        setDistrictId(id)
-    }
-
-
-    // area selection part
-    useEffect(() => {
-        const url = (`http://192.168.0.105:5000/bd/${selectedDivision}/${districtId}`)
-
-        const fetchData = async () => {
-            const response = await fetch(url)
-            const json = await response.json()
-            setAreas(json)
-        }
-        fetchData()
-    }, [districtId, selectedDivision])
-
-    const handleChangeArea = (e) => {
-        const value = e.target.value
-        setLocatoin(value)
-    }
-
-
+const {
+    location,
+    divisions,
+    divisionId,
+    districts,
+    districtId,
+    areas,
+    handleChange,
+    handleChangeDis,
+    handleChangeArea,
+    locationIcon
+    } = useContext(AuthContext)
 
     return (
         <div className='text-center'>

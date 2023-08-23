@@ -3,13 +3,14 @@ import Main from "../layouts/Main";
 import Home from "../components/Home/Home/Home";
 import Dashboard from "../Dashboard/Dashboard";
 import DashboardLayout from "../layouts/DashboardLayout";
-import Settings from "../Dashboard/Settings";
-import SavedItems from "../Dashboard/SavedItems";
+import Settings from "../Dashboard/AdsPageLayoutComponents/Settings";
+import SavedItems from "../Dashboard/AdsPageLayoutComponents/SavedItems";
 import AdsPageLayout from "../layouts/AdsPageLayout";
 import AdsPage from "../components/AdsPage.js/AdsPage";
 import AdminLayout from "../layouts/AdminLayout";
 import AdminHome from "../components/Admin/AdminHome/AdminHome";
 import AdsDetails from "../components/AdsPage.js/AdDetails";
+import ChatPageLayout from "../layouts/ChatPageLayout";
 
 export const routes = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ export const routes = createBrowserRouter([
             {
                 path: '/ads/:params',
                 element: <AdsDetails></AdsDetails>
+            },
+            {
+                path: '/chat',
+                element:<ChatPageLayout></ChatPageLayout>
             }
         ]
     },

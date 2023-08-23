@@ -19,6 +19,7 @@ const Navbar = () => {
 
     const menu = <>
         <li><Link to='/ads'>All Ads</Link></li>
+        <li><Link to='/chat'>Chat</Link></li>
         <li>
             <label htmlFor="login_modal" className="">Login</label>
         </li>
