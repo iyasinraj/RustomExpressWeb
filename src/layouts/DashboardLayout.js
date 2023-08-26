@@ -1,8 +1,8 @@
 import React from 'react';
-import Navbar from '../components/Shared/Navbar/Navbar';
+import Navbar from '../pages/Shared/Navbar/Navbar';
 import { Outlet } from 'react-router-dom';
-import Footer from '../components/Shared/Footer/Footer';
-import Sidebar from '../Dashboard/AdsPageLayoutComponents/Sidebar';
+import Footer from '../pages/Shared/Footer/Footer';
+import Sidebar from '../pages/Dashboard/AdsPageLayoutComponents/Sidebar';
 
 const DashboardLayout = () => {
     return (

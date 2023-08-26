@@ -1,7 +1,7 @@
 import React from 'react';
-import AdminHeader from '../components/Admin/AdminShared/AdminHeader/AdminHeader';
+import AdminHeader from '../pages/Admin/AdminShared/AdminHeader/AdminHeader';
 import { Outlet } from 'react-router-dom';
-import AdminFooter from '../components/Admin/AdminShared/AdminFooter/AdminFooter';
+import AdminFooter from '../pages/Admin/AdminShared/AdminFooter/AdminFooter';
 
 const AdminLayout = () => {
     return (

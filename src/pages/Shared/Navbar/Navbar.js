@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Login from '../../Login/Login';
 import { Link } from 'react-router-dom';
-import AdPostModal from '../../../Dashboard/AdPostModal/AdPostModal';
+import AdPostModal from '../../Dashboard/AdPostModal/AdPostModal';
 
 const Navbar = () => {
     const [theme, setTheme] = useState(

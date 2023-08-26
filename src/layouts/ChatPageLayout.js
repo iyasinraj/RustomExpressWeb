@@ -1,6 +1,6 @@
 import React from 'react';
-import Chat from '../components/Chat/Chat';
-import ChatAvatar from '../components/Chat/ChatComponent/ChatAvatar';
+import Chat from '../pages/Chat/Chat';
+import ChatAvatar from '../pages/Chat/ChatComponent/ChatAvatar';
 import { Link } from 'react-router-dom';
 
 const ChatPageLayout = () => {

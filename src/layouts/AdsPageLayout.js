@@ -1,9 +1,9 @@
 import React from 'react';
-import Navbar from '../components/Shared/Navbar/Navbar';
+import Navbar from '../pages/Shared/Navbar/Navbar';
 import { Outlet } from 'react-router-dom';
-import Footer from '../components/Shared/Footer/Footer';
-import SelectLocatoinModal from '../components/Home/SelectLocation/SelectLocatoinModal';
-import Filter from '../Dashboard/AdsPageLayoutComponents/Filter';
+import Footer from '../pages/Shared/Footer/Footer';
+import SelectLocatoinModal from '../pages/Home/SelectLocation/SelectLocatoinModal';
+import Filter from '../pages/Dashboard/AdsPageLayoutComponents/Filter';
 
 const AdsPageLayout = () => {
     return (

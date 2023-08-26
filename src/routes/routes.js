@@ -1,15 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../layouts/Main";
-import Home from "../components/Home/Home/Home";
-import Dashboard from "../Dashboard/Dashboard";
+import Home from "../pages/Home/Home/Home";
+import Dashboard from "../pages/Dashboard/Dashboard";
 import DashboardLayout from "../layouts/DashboardLayout";
-import Settings from "../Dashboard/AdsPageLayoutComponents/Settings";
-import SavedItems from "../Dashboard/AdsPageLayoutComponents/SavedItems";
+import Settings from "../pages/Dashboard/AdsPageLayoutComponents/Settings";
+import SavedItems from "../pages/Dashboard/AdsPageLayoutComponents/SavedItems";
 import AdsPageLayout from "../layouts/AdsPageLayout";
-import AdsPage from "../components/AdsPage.js/AdsPage";
+import AdsPage from "../pages/AdsPage.js/AdsPage";
 import AdminLayout from "../layouts/AdminLayout";
-import AdminHome from "../components/Admin/AdminHome/AdminHome";
-import AdsDetails from "../components/AdsPage.js/AdDetails";
+import AdminHome from "../pages/Admin/AdminHome/AdminHome";
+import AdsDetails from "../pages/AdsPage.js/AdDetails";
 import ChatPageLayout from "../layouts/ChatPageLayout";
 
 export const routes = createBrowserRouter([
