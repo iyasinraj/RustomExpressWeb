@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { AuthContext } from '../../../context/UserContext';
 
 const Settings = () => {
+    const {user, logOut} = useContext(AuthContext)
+    const handleLogOut = () => {
+        logOut()
+        .then( ()=> console.log('logOut successfull'))
+        .catch(error => console.log(error))
+    }
     return (
         <div>
             <Helmet>
@@ -23,7 +30,7 @@ const Settings = () => {
 
                     <div className='flex items-center mb-4'>
                         <p>E_Mail: </p>
-                        <input type="text" placeholder="Type here" className="ms-4 input input-bordered w-full" />
+                        <input type="email" placeholder={user.email} className="ms-4 input input-bordered w-full" readOnly/>
                     </div>
 
                     <div className='flex items-center mb-4'>
@@ -55,8 +62,8 @@ const Settings = () => {
                 </div>
 
                 <div className='mt-6'>
-                    <button className='btn mr-6'>Delete Account</button>
-                    <button className='btn btn-error'>Log Out</button>
+                    <button className={`btn mr-6`}>Delete Account</button>
+                    <button className={`btn btn-error`} onClick={handleLogOut}>Log Out</button>
                 </div>
             </div>
         </div>

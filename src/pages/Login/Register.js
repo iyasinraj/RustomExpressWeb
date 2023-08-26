@@ -1,13 +1,56 @@
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../context/UserContext';
+import { toast } from 'react-hot-toast';
 
 const Register = ({ setMethod }) => {
-    
-
     const { register, handleSubmit } = useForm()
+    const {createUser, updateUser, googlePopUpLogin} = useContext(AuthContext)
+    const [signUpError, setSignUpError] = useState('')
 
     const handleRegister = (data) => {
         console.log(data)
+        setSignUpError('')
+        createUser(data.email, data.password)
+        .then(result => {
+            const user = result.user
+            console.log(user)
+            toast.success('Account created successfully')
+            // close modal
+            const modalCheckbox = document.getElementById('login_modal');
+            if (modalCheckbox) {
+                modalCheckbox.checked = false;
+            }
+            const userInfo = {
+                displayName: data.name
+            }
+            updateUser(userInfo)
+            .then(() => {})
+            .catch(error => console.log(error))
+        })
+        .catch(err => {
+            console.log(err)
+            setSignUpError(err.message.split('/')[1])
+        })
+    }
+    const handleGooglePopUpLogin = () => {
+        googlePopUpLogin()
+        .then(result => {
+            const user = result.user
+            console.log(user)
+             // close modal
+             const modalCheckbox = document.getElementById('login_modal');
+             if (modalCheckbox) {
+                 modalCheckbox.checked = false;
+             }
+            toast.success('Account created successfully')
+            
+        })
+        .catch(err => {
+            console.log(err)
+            setSignUpError(err.message.split('/')[1])
+        })
 
     }
 
@@ -41,21 +84,21 @@ const Register = ({ setMethod }) => {
                                 <label className="label">
                                     <span className="label-text">Full Name *</span>
                                 </label>
-                                <input type="text" {...register("name", {required: true})} placeholder="Full Name" className="input input-bordered" required />
+                                <input type="text" {...register("name", {required: true})} className="input input-bordered" required />
                             </div>
 
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">E-mail *</span>
                                 </label>
-                                <input type="email" {...register("email", {required: true})} placeholder="example@mail.com" className="input input-bordered" required />
+                                <input type="email" {...register("email", {required: true})} className="input input-bordered" required />
                             </div>
 
                             <div className="form-control">
                                 <label className="label">
                                     <span className="label-text">Mobile *</span>
                                 </label>
-                                <input type="number" {...register("number", {required: true})} placeholder="Mobile Number" className="input input-bordered" required />
+                                <input type="number" {...register("number", {required: true})} className="input input-bordered" required />
                             </div>
 
                             {/* <div className='md:grid gap-2 md:grid-cols-2'>
@@ -100,8 +143,9 @@ const Register = ({ setMethod }) => {
                                 <label className="label">
                                     <span className="label-text">Password *</span>
                                 </label>
-                                <input type="password" {...register("password", {required: true})} placeholder="password" className="input input-bordered" required />
+                                <input type="password" {...register("password", {required: true})} className="input input-bordered" required />
                             </div>
+                            {signUpError && <p className='text-red-500 font-bold'>{`(${signUpError}`}</p>}
                             <div className="form-control mt-6">
                                 <button type='submit' className="btn btn-primary">Register</button>
                             </div>
@@ -112,8 +156,7 @@ const Register = ({ setMethod }) => {
                             
                             <div className='divider'>Or countinue with</div>
                             <div className='mt-4 px-4 flex justify-between'>
-                                <h1 className='w-5/12 text-center bg-base-200 p-2 rounded-md'><Link>Google</Link></h1>
-                                <h1 className='w-5/12 text-center bg-base-200 p-2 rounded-md'><Link>Facebook</Link></h1>
+                                <h1 onClick={handleGooglePopUpLogin} className='w-full text-center bg-base-200 p-2 rounded-md'><Link>Google</Link></h1>
                             </div>
                         </div>
 

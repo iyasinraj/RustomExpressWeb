@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Login from '../../Login/Login';
 import { Link } from 'react-router-dom';
 import AdPostModal from '../../Dashboard/AdPostModal/AdPostModal';
+import { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
+    const { user } = useContext(AuthContext)
     const [theme, setTheme] = useState(
-        localStorage.getItem("theme")? localStorage.getItem("theme"): "light")
+        localStorage.getItem("theme") ? localStorage.getItem("theme") : "light")
 
     const toogleTheme = () => {
         localStorage.setItem("theme", theme)
         setTheme(theme === 'dark' ? 'light' : 'dark')
     }
-    
+
     useEffect(() => {
         const localTheme = localStorage.getItem("theme")
         document.querySelector('html').setAttribute('data-theme', localTheme)
@@ -19,11 +21,17 @@ const Navbar = () => {
 
     const menu = <>
         <li><Link to='/ads'>All Ads</Link></li>
-        <li><Link to='/chat'>Chat</Link></li>
-        <li>
-            <label htmlFor="login_modal" className="">Login</label>
-        </li>
-        <li><Link to='/dashboard'>Dashboard</Link></li>
+        {
+            user?.uid ?
+                <li><Link to='/chat'>Chat</Link></li>
+                :
+                <li>
+                    <label htmlFor="login_modal" className="">Login</label>
+                </li>
+        }
+        {
+            user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
+        }
 
     </>
     return (
@@ -45,7 +53,7 @@ const Navbar = () => {
                         {menu}
                     </ul>
                 </div>
-                <label htmlFor="post_ad_modal" className="btn">Post Ad</label>
+                <label htmlFor={user? `post_ad_modal`:`login_modal`} className="btn">Post Ad</label>
                 {/* <Link htmlFor="login_modal" className="btn">Post Ad</Link> */}
 
                 {/* toogle theme */}

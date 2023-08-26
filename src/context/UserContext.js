@@ -1,7 +1,11 @@
 import React, { createContext, useEffect, useState } from 'react';
-
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import app from '../firebase/firebase.config'
 
 export const AuthContext = createContext()
+const auth = getAuth(app)
+
+
 const UserContext = ({ children }) => {
 
 
@@ -18,8 +22,8 @@ const UserContext = ({ children }) => {
     const localUrl = "http://192.168.0.105:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
 
     // division selection part
     useEffect(() => {
@@ -79,6 +83,46 @@ const UserContext = ({ children }) => {
     }
     // location area end
 
+
+    // user registration with firebase
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const provider = new GoogleAuthProvider()
+    const createUser = (email, password) => {
+        setLoading(true)
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
+    const updateUser = (userInfo) => {
+        return updateProfile(user, userInfo)
+
+    }
+    const userLogin = (email, password) => {
+        setLoading(true)
+        return signInWithEmailAndPassword(auth, email, password)
+    }
+    const googlePopUpLogin = () => {
+        setLoading(true)
+        return signInWithPopup(auth, provider)
+    }
+    const logOut = () => {
+        setLoading(true)
+        return signOut(auth)
+    }
+
+    // for user observer
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+            setUser(currentUser)
+            setLoading(false)
+        });
+        return () => unsubscribe()
+    }, [])
+
+
+
+
+
+
     const authInfo = {
         locationIcon,
         location,
@@ -98,6 +142,13 @@ const UserContext = ({ children }) => {
         handleChange,
         handleChangeDis,
         handleChangeArea,
+        createUser,
+        updateUser,
+        userLogin,
+        googlePopUpLogin,
+        user,
+        loading,
+        logOut
     }
     return (
         <div>

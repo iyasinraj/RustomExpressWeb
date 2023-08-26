@@ -10,7 +10,6 @@ const Home = () => {
         <title>PIPIL - 2023</title>
       </Helmet>
 
-
       <Hero></Hero>
       <h2 className='text-center text-2xl font-bold'>Items Category</h2>
       <div className='my-20'>

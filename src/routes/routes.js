@@ -11,6 +11,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import AdminHome from "../pages/Admin/AdminHome/AdminHome";
 import AdsDetails from "../pages/AdsPage.js/AdDetails";
 import ChatPageLayout from "../layouts/ChatPageLayout";
+import PrivateRoute from "./PrivateRoute";
 
 export const routes = createBrowserRouter([
     {
@@ -27,25 +28,25 @@ export const routes = createBrowserRouter([
             },
             {
                 path: '/chat',
-                element:<ChatPageLayout></ChatPageLayout>
+                element:<PrivateRoute><ChatPageLayout></ChatPageLayout></PrivateRoute>
             }
         ]
     },
     {
         path: '/dashboard',
-        element: <DashboardLayout></DashboardLayout>,
+        element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
         children: [
             {
                 path:'/dashboard',
-                element: <Dashboard></Dashboard>
+                element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>
             },
             {
                 path:'/dashboard/settings',
-                element:<Settings></Settings>
+                element:<PrivateRoute><Settings></Settings></PrivateRoute>
             },
             {
                 path:'/dashboard/saveditems',
-                element:<SavedItems></SavedItems>
+                element: <PrivateRoute><SavedItems></SavedItems></PrivateRoute>
             },
         ]
     },

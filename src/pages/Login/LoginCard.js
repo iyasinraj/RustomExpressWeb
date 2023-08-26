@@ -1,7 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/UserContext';
+import { toast } from 'react-hot-toast';
 
 const LoginCard = ({ setMethod }) => {
+    const { register, handleSubmit } = useForm()
+    const { userLogin, googlePopUpLogin } = useContext(AuthContext)
+    const [loginError, setLoginError] = useState('')
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location.state?.from?.pathname || '/'
+
+    const handleLogin = (data) => {
+        setLoginError('')
+        userLogin(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                console.log(user)
+                toast.success('Log in Successfully')
+                // close modal
+                const modalCheckbox = document.getElementById('login_modal');
+                if (modalCheckbox) {
+                    modalCheckbox.checked = false;
+                }
+                navigate(from, { replace: true })
+            })
+            .catch(error => {
+                console.log(error)
+                setLoginError(error.message.split('/')[1])
+
+            })
+    }
+    const handleGooglePopUpLogin = () => {
+        googlePopUpLogin()
+            .then(result => {
+                const user = result.user
+                console.log(user)
+                // close modal
+                const modalCheckbox = document.getElementById('login_modal');
+                if (modalCheckbox) {
+                    modalCheckbox.checked = false;
+                }
+                toast.success('Login successfull')
+
+            })
+            .catch(err => {
+                console.log(err)
+                setLoginError(err.message.split('/')[1])
+            })
+
+    }
     return (
         <div className="hero">
             <div className="hero-content flex-col lg:flex-row-reverse">
@@ -11,32 +60,35 @@ const LoginCard = ({ setMethod }) => {
                 </div>
                 <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <div className="card-body">
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Email</span>
-                            </label>
-                            <input type="text" placeholder="email" className="input input-bordered" />
-                        </div>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text">Password</span>
-                            </label>
-                            <input type="text" placeholder="password" className="input input-bordered" />
-                            <label className="label">
-                                <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                            </label>
-                        </div>
-                        <div className="form-control mt-6">
-                            <button className="btn btn-primary">Login</button>
-                        </div>
+
+                        <form action=""
+                            onSubmit={handleSubmit(handleLogin)}
+                        >
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Email</span>
+                                </label>
+                                <input type="email" {...register("email", { required: true })} className="input input-bordered" required />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Password</span>
+                                </label>
+                                <input type="password" {...register("password", { required: true })} className="input input-bordered" required />
+                                <label className="label">
+                                    <Link className="label-text-alt link link-hover">Forgot password?</Link>
+                                </label>
+                            </div>
+                            {loginError && <p className='text-red-500 font-bold'>{`(${loginError}`}</p>}
+                            <div className="form-control mt-6">
+                                <button type='submit' className="btn btn-primary">Login</button>
+                            </div>
+                        </form>
 
                         <div className='w-full'>
-                            <h1 className='text-center my-4'>Or countinue with</h1>
-                            <hr />
+                            <div className='divider'>Or countinue with</div>
                             <div className='mt-4 px-4 flex justify-between'>
-                                <h1><Link>Google</Link></h1>
-                                <h1><Link>Facebook</Link></h1>
-                                <h1><Link>GitHub</Link></h1>
+                                <h1 onClick={handleGooglePopUpLogin} className='w-full text-center bg-base-200 p-2 rounded-md'><Link>Google</Link></h1>
                             </div>
                         </div>
 
