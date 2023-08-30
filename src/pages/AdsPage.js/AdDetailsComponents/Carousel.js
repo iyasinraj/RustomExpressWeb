@@ -1,38 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import ModalImage from 'react-modal-image';
 
-const Carousel = () => {
+
+const Carousel = ({ images }) => {
+    const [lightboxIndex, setLightboxIndex] = useState(null);
+
+    const settings = {
+        // Configure your carousel settings here
+        dots: true,
+        arrows: false,
+    };
+
+    const openLightbox = async (index) => {
+        setLightboxIndex(index);
+        const dialog = document.getElementById('my_modal_3');
+        if (dialog) {
+            await dialog.showModal();
+        }
+    };
+
+    const closeLightbox = () => {
+        setLightboxIndex(null);
+    };
+
     return (
         <div>
-            <div className="carousel w-full">
-                <div id="slide1" className="carousel-item relative w-full">
-                    <img alt='img' src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fHww&w=1000&q=80" className="w-full" />
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide4" className="btn btn-circle">❮</a>
-                        <a href="#slide2" className="btn btn-circle">❯</a>
-                    </div>
-                </div>
-                <div id="slide2" className="carousel-item relative w-full">
-                    <img alt='img' src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fHww&w=1000&q=80" className="w-full" />
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide1" className="btn btn-circle">❮</a>
-                        <a href="#slide3" className="btn btn-circle">❯</a>
-                    </div>
-                </div>
-                <div id="slide3" className="carousel-item relative w-full">
-                    <img alt='img' src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fHww&w=1000&q=80" className="w-full" />
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide2" className="btn btn-circle">❮</a>
-                        <a href="#slide4" className="btn btn-circle">❯</a>
-                    </div>
-                </div>
-                <div id="slide4" className="carousel-item relative w-full">
-                    <img alt='img' src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fHww&w=1000&q=80" className="w-full" />
-                    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                        <a href="#slide3" className="btn btn-circle">❮</a>
-                        <a href="#slide1" className="btn btn-circle">❯</a>
-                    </div>
-                </div>
+            <div >
+                <Slider {...settings} className=''>
+                    {images.map((link, index) => (
+                        <div key={index} onClick={() => openLightbox(index)}>
+                            <img className='h-[350px] w-full' src={link} alt={`carousalImage ${index}`} />
+                        </div>
+                    ))}
+                </Slider>
             </div>
+
+            {lightboxIndex !== null && (
+                <div>{/* You can open the modal using ID.showModal() method */}
+                    {/* <button className="btn" onClick={()=>window.my_modal_3.showModal()}>open modal</button> */}
+                    <dialog id="my_modal_3" className="modal">
+                        <form method="dialog" className="modal-box w-screen h-fit">
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                            <ModalImage
+                                hideDownload={true}
+                                hideZoom={true}
+                                small={images[lightboxIndex]}
+                                large={images[lightboxIndex]}
+                                alt={`Image ${lightboxIndex}`}
+                                onClose={closeLightbox}
+                            />
+                        </form>
+                    </dialog>
+                </div>
+            )}
         </div>
     );
 };

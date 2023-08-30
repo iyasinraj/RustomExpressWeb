@@ -154,12 +154,17 @@ const UserContext = ({ children }) => {
     // get all post //
     //-------------//
     const [ads, setAds] = useState([])
-    useEffect( () => {
+    useEffect(() => {
         fetch(`${localUrl}/ads`)
-        .then( res => res.json())
-        .then( data => setAds(data))
-        .catch( error => console.log(error) )
-    },[])
+            .then(res => res.json())
+            .then(data => setAds(data))
+            .catch(error => console.log(error))
+    }, [])
+
+
+
+   
+
 
 
     const authInfo = {

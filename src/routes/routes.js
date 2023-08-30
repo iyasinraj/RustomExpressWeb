@@ -13,7 +13,7 @@ import AdsDetails from "../pages/AdsPage.js/AdDetails";
 import ChatPageLayout from "../layouts/ChatPageLayout";
 import PrivateRoute from "./PrivateRoute";
 
-
+const url = 'http://192.168.0.102:5000'
 export const routes = createBrowserRouter([
     {
         path: '/',
@@ -26,7 +26,7 @@ export const routes = createBrowserRouter([
             {
                 path: '/ads/:id',
                 loader: async ({params}) => {
-                    return fetch(`http://192.168.0.102:5000/ads/${params.id}`)
+                    return fetch(`${url}/ads/${params.id}`)
                 },
                 element: <AdsDetails></AdsDetails>
             },
