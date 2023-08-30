@@ -6,8 +6,8 @@ const Settings = () => {
     const {user, logOut} = useContext(AuthContext)
     const handleLogOut = () => {
         logOut()
-        .then( ()=> console.log('logOut successfull'))
-        .catch(error => console.log(error))
+        .then( ()=> {})
+        .catch(error => {})
     }
     return (
         <div>

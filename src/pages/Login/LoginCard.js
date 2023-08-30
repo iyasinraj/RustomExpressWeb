@@ -16,8 +16,7 @@ const LoginCard = ({ setMethod }) => {
         setLoginError('')
         userLogin(data.email, data.password)
             .then(result => {
-                const user = result.user;
-                console.log(user)
+                // const user = result.user;
                 toast.success('Log in Successfully')
                 // close modal
                 const modalCheckbox = document.getElementById('login_modal');
@@ -27,7 +26,6 @@ const LoginCard = ({ setMethod }) => {
                 navigate(from, { replace: true })
             })
             .catch(error => {
-                console.log(error)
                 setLoginError(error.message.split('/')[1])
 
             })
@@ -35,8 +33,8 @@ const LoginCard = ({ setMethod }) => {
     const handleGooglePopUpLogin = () => {
         googlePopUpLogin()
             .then(result => {
-                const user = result.user
-                console.log(user)
+                // const user = result.user
+                
                 // close modal
                 const modalCheckbox = document.getElementById('login_modal');
                 if (modalCheckbox) {

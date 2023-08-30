@@ -18,8 +18,11 @@ const UserContext = ({ children }) => {
     const [districts, setDistricts] = useState([])
     const [districtId, setDistrictId] = useState()
     const [areas, setAreas] = useState([])
+    const [categories, setCategories] = useState([])
+    const [categoryId, setCategoryId] = useState()
+    const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "http://192.168.0.105:5000"
+    const localUrl = "http://192.168.0.102:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -44,7 +47,6 @@ const UserContext = ({ children }) => {
         setSelectedDivision(name)
         setLocatoin(name)
     }
-
     // district selection part
     useEffect(() => {
         const url = (`${localUrl}/bd/${divisionId}`)
@@ -56,7 +58,6 @@ const UserContext = ({ children }) => {
         }
         fetchData()
     }, [divisionId])
-
     const handleChangeDis = (e) => {
         const value = e.target.value
         const name = value.split(",")[0]
@@ -64,7 +65,6 @@ const UserContext = ({ children }) => {
         setLocatoin(name)
         setDistrictId(id)
     }
-
     // area selection part
     useEffect(() => {
         const url = (`${localUrl}/bd/${selectedDivision}/${districtId}`)
@@ -76,7 +76,6 @@ const UserContext = ({ children }) => {
         }
         fetchData()
     }, [districtId, selectedDivision])
-
     const handleChangeArea = (e) => {
         const value = e.target.value
         setLocatoin(value)
@@ -84,8 +83,19 @@ const UserContext = ({ children }) => {
     // location area end
 
 
-    // user registration with firebase
+
+    // categories
+    useEffect(() => {
+        fetch(`${localUrl}/categories`)
+            .then(res => res.json())
+            .then(data => setCategories(data))
+    }, [])
+
+    //---------------------------------//
+    // user registration with firebase //
+    //--------------------------------//
     const [user, setUser] = useState(null)
+    const [dbUser, setDbUser] = useState([])
     const [loading, setLoading] = useState(true)
     const provider = new GoogleAuthProvider()
     const createUser = (email, password) => {
@@ -109,7 +119,9 @@ const UserContext = ({ children }) => {
         return signOut(auth)
     }
 
-    // for user observer
+    //--------------------//
+    // for user observer //
+    //------------------//
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, currentUser => {
             setUser(currentUser)
@@ -119,11 +131,40 @@ const UserContext = ({ children }) => {
     }, [])
 
 
+    // user info from database 
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = (`${localUrl}/user?email=${user.email}`)
+            const response = await fetch(url)
+            const json = await response.json()
+                .catch(error => console.log(error))
+            setDbUser(json[0])
+        }
+        if (user) {
+            return fetchData()
+        }
+    }, [user])
 
 
+    // -------------------------------------------//
+    // post ads function on Dashboard/AdPostModal//
+    //------------------------------------------//
+
+    //---------------//
+    // get all post //
+    //-------------//
+    const [ads, setAds] = useState([])
+    useEffect( () => {
+        fetch(`${localUrl}/ads`)
+        .then( res => res.json())
+        .then( data => setAds(data))
+        .catch( error => console.log(error) )
+    },[])
 
 
     const authInfo = {
+        ads,
+        localUrl,
         locationIcon,
         location,
         setLocatoin,
@@ -142,11 +183,14 @@ const UserContext = ({ children }) => {
         handleChange,
         handleChangeDis,
         handleChangeArea,
+        categories, subCategories, setSubCategories,
+        categoryId, setCategoryId,
         createUser,
         updateUser,
         userLogin,
         googlePopUpLogin,
         user,
+        dbUser,
         loading,
         logOut
     }
