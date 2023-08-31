@@ -72,12 +72,9 @@ const AdPostModal = () => {
                 }
 
                 const imgData = await response.json();
-                // console.log(imgData)
                 imageUrls.push(imgData.data.display_url);
                 // Save the image URL this for low quality image(display_url) this for original size(url)
             }
-
-            // console.log('Image URLs:', imageUrls);
 
             const title = data.title
             const description = data.description
@@ -99,10 +96,6 @@ const AdPostModal = () => {
             console.error('Error uploading images:', error);
         }
 
-
-        // console.log(title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number)
-        // console.log(data, dbUser)
-
     }
     const postAd = (title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number) => {
         const post = {
@@ -110,7 +103,7 @@ const AdPostModal = () => {
             description: description,
             price: price,
             condition: condition,
-            postStatus: "avaiable",
+            postStatus: "available",
             additionalLink: link,
             images: images,
             location: [

@@ -32,7 +32,7 @@ const Carousel = ({ images }) => {
                 <Slider {...settings} className=''>
                     {images.map((link, index) => (
                         <div key={index} onClick={() => openLightbox(index)}>
-                            <img className='h-[350px] w-full' src={link} alt={`carousalImage ${index}`} />
+                            <img className='h-[350px] mx-auto' src={link} alt={`carousalImage ${index}`} />
                         </div>
                     ))}
                 </Slider>
@@ -41,9 +41,9 @@ const Carousel = ({ images }) => {
             {lightboxIndex !== null && (
                 <div>{/* You can open the modal using ID.showModal() method */}
                     {/* <button className="btn" onClick={()=>window.my_modal_3.showModal()}>open modal</button> */}
-                    <dialog id="my_modal_3" className="modal">
-                        <form method="dialog" className="modal-box w-screen h-fit">
-                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    <dialog id="my_modal_3" className="modal bg-none">
+                        <form method="dialog" className="modal-box bg-transparent w-full h-fit">
+                            <button className="btn btn-sm btn-circle btn-ghost text-xl font-bold absolute right-1 top-1">✕</button>
                             <ModalImage
                                 hideDownload={true}
                                 hideZoom={true}

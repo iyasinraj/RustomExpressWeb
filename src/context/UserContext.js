@@ -18,11 +18,13 @@ const UserContext = ({ children }) => {
     const [districts, setDistricts] = useState([])
     const [districtId, setDistrictId] = useState()
     const [areas, setAreas] = useState([])
+    
+    // categories 
     const [categories, setCategories] = useState([])
     const [categoryId, setCategoryId] = useState()
     const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "http://192.168.0.102:5000"
+    const localUrl = "http://localhost:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -153,22 +155,48 @@ const UserContext = ({ children }) => {
     //---------------//
     // get all post //
     //-------------//
+
+    
     const [ads, setAds] = useState([])
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [categoryName, setCategoryName] = useState('')
+
+    const fetchData = async (page = 1) => {
+        try {
+            const queryParams = new URLSearchParams({
+                sortBy: 'createdAt',
+                sortOrder: 'desc',
+                limit: 10,
+                page: page,
+            });
+
+            const response = await fetch(`${localUrl}/ads?${queryParams}`);
+            const data = await response.json();
+            setAds(data.items); // Set the data to ads instead of items
+            setTotalPages(data.totalPages);
+            setCurrentPage(page);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
     useEffect(() => {
-        fetch(`${localUrl}/ads`)
-            .then(res => res.json())
-            .then(data => setAds(data))
-            .catch(error => console.log(error))
-    }, [])
+        fetchData();
+    }, []);
 
 
 
-   
+
+
 
 
 
     const authInfo = {
         ads,
+        setAds,
+        fetchData,
+        currentPage,
+        totalPages,
         localUrl,
         locationIcon,
         location,
@@ -190,6 +218,7 @@ const UserContext = ({ children }) => {
         handleChangeArea,
         categories, subCategories, setSubCategories,
         categoryId, setCategoryId,
+        categoryName, setCategoryName,
         createUser,
         updateUser,
         userLogin,

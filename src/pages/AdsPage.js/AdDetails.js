@@ -1,7 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
 import Carousel from "./AdDetailsComponents/Carousel";
-import SimilarAds from "./AdDetailsComponents/SimilarAds";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/UserContext";
 
 import {
@@ -9,11 +8,13 @@ import {
     FacebookMessengerShareButton, FacebookShareButton, TwitterIcon, TwitterShareButton,
     WhatsappIcon, WhatsappShareButton
 } from "react-share";
+import AdsCard from "./AdsPageComponents/AdsCard";
 
 const AdsDetails = () => {
-    const { selectedDivision } = useContext(AuthContext)
+    const { selectedDivision, localUrl } = useContext(AuthContext)
     const post = useLoaderData()
-    const { title, description, price, createdAt, location, condition, category, author, additionalLink, images } = post
+    const { title, description, price, createdAt, location, condition, category, author, images } = post
+
 
     const date = new Date(createdAt);
     const year = date.getFullYear();
@@ -34,12 +35,26 @@ const AdsDetails = () => {
     const handleCopyClick = () => {
         navigator.clipboard.writeText(url).then(() => {
             setIsCopied(true);
-            setTimeout(() => setIsCopied(false), 1500); // Reset "Copied" status after 1.5 seconds
+            setTimeout(() => setIsCopied(false), 2000); // Reset "Copied" status after 1.5 seconds
         })
     }
 
-    console.log(url)
+    const [similarAds, setSimilarAds] = useState([])
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        setLoading(true); // Set loading to true before fetching data
+        fetch(`${localUrl}/ads?category=${category[0].category}&limit=4`)
+            .then(res => res.json())
+            .then(data => {
+                setSimilarAds(data.items);
+                setLoading(false); // Set loading to false after data is fetched
+            })
+            .catch(error => {
+                console.error(error);
+                setLoading(false); // Set loading to false if there's an error
+            });
+    }, [category, localUrl]);
 
     return (
         <div className="">
@@ -139,14 +154,28 @@ const AdsDetails = () => {
 
                     <p className="mt-4 font-bold">Description</p>
                     <div className="m-2 p-2 border border-base-200 max-w-[640px]">
-                        <textarea className="textarea text-sm font-semibold w-full min-h-[150px] h-full" value={description} style={{ resize: 'none' }} readOnly>{description}</textarea>
+                        <textarea className="textarea text-sm font-semibold w-full min-h-[150px] h-full" style={{ resize: 'none' }} readOnly>{description}</textarea>
                         <p></p>
                     </div>
                 </div>
             </div>
             <div>
                 <h2 className="text-center mt-10 pt-4 text-2xl md:text-3xl font-bold">Similar ads</h2>
-                <SimilarAds></SimilarAds>
+                <div>
+                    {loading ? (
+                        <div className="h-screen w-full flex justify-center items-center">
+                            <span className="loading loading-dots loading-lg"></span>
+                        </div>
+                    ) : similarAds.length > 0 ? (
+                        <div className="grid grid-cols-2">
+                            { similarAds.map(ad => <AdsCard key={ad._id} singleAd={ad}></AdsCard>)}
+                        </div>
+                    ) : (
+                        <div className="w-full">
+                            <p className="text-center">No ads available.</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
