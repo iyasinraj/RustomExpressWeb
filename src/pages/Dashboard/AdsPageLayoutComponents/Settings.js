@@ -3,11 +3,15 @@ import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../../context/UserContext';
 
 const Settings = () => {
-    const {user, logOut} = useContext(AuthContext)
+    const {user, setUser, logOut} = useContext(AuthContext)
     const handleLogOut = () => {
         logOut()
-        .then( ()=> {})
-        .catch(error => {})
+        .then( ()=> {
+            setUser(null)
+        })
+        .catch(error => {
+            console.error(error)
+        })
     }
     return (
         <div>

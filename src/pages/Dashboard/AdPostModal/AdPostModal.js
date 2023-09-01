@@ -159,7 +159,7 @@ const AdPostModal = () => {
                         <div className='grid md:grid-cols-3 gap-2 md:gap-6'>
 
                             <select className="select select-bordered w-full" {...register("division", { required: true })} onChange={handleChange}>
-                                <option disabled value={["none", 0]} selected>Select Division</option>
+                                <option disabled selected>Select Division</option>
                                 {
                                     divisions.map(division => <LocationOptions key={division.id} options={division}></LocationOptions>)
                                 }
@@ -168,7 +168,7 @@ const AdPostModal = () => {
 
 
                             <select {...register("state", { required: true })} className="select select-bordered w-full" onChange={handleChangeDis} >
-                                <option disabled value={["none", 0]} selected>Select State</option>
+                                <option disabled selected>Select State</option>
                                 {
                                     districts.map(district => <LocationOptions key={district.id} options={district}></LocationOptions>)
                                 }
@@ -176,7 +176,7 @@ const AdPostModal = () => {
 
 
                             <select {...register("area", { required: true })} className="select select-bordered w-full" name="area" onChange={handleChangeArea}>
-                                <option disabled value={["none", 0]} selected>Select Area</option>
+                                <option disabled selected>Select Area</option>
                                 {
                                     areas.map(area => <option key={area.id} value={area.postOffice}>{area.postOffice + " " + area.postCode}</option>)
                                 }
@@ -187,14 +187,14 @@ const AdPostModal = () => {
                         <h2 className='text-xl font-bold my-4'>Select Product Category</h2>
                         <div className='grid md:grid-cols-3 gap-2 md:gap-6'>
                             <select {...register("category", { required: true })} className="select select-bordered w-full" onChange={subCatChange}>
-                                <option disabled selected value={["none", 0]}>Select Product Category</option>
+                                <option disabled selected >Select Product Category</option>
 
                                 {
                                     categories.map(category => <option key={category.id} value={[category.name, category.id]}>{category.name}</option>)
                                 }
                             </select>
                             <select {...register("subCategory", { required: true })} className="select select-bordered w-full">
-                                <option disabled selected value={["none", 0]}>Select Sub Category</option>
+                                <option disabled selected >Select Sub Category</option>
 
                                 {
                                     subCategories.map((subCategory, i) => <option key={i} value={subCategory.name}>{subCategory.name}</option>)
@@ -230,7 +230,7 @@ const AdPostModal = () => {
                         {errors.images && <p className="text-red-600">{errors.images.message}</p>}
 
                         <h2 className='text-xl font-bold my-4'>Mobile Number</h2>
-                        <input type="number" {...register("number", { required: true })} defaultValue={dbUser.mobile} placeholder="Mobile Number" className="input input-bordered w-full" />
+                        <input type="number" {...register("number", { required: true })} defaultValue={dbUser?.mobile} placeholder="Mobile Number" className="input input-bordered w-full" />
                         {errors.number && <p className="text-red-600" role="alert">Number is required</p>}
 
                         <h2 className='text-xl font-bold my-4'>Additional Link (Optional)</h2>

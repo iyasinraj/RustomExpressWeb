@@ -44,7 +44,7 @@ const AdsDetails = () => {
 
     useEffect(() => {
         setLoading(true); // Set loading to true before fetching data
-        fetch(`${localUrl}/ads?category=${category[0].category}&limit=4`)
+        fetch(`${localUrl}/ads?category=${category[0]?.category}&limit=4`)
             .then(res => res.json())
             .then(data => {
                 setSimilarAds(data.items);
@@ -67,7 +67,7 @@ const AdsDetails = () => {
                         <p className="font-bold text-xl md:text-2xl">{title}</p>
                         <p className="font-extrabold md:text-xl">TK: {price}</p>
                     </div>
-                    <p className="font-light my-2">Sale by: {author[0].name}</p>
+                    <p className="font-light my-2">Sale by: {author[0]?.name}</p>
                     <div className="grid grid-cols-2 w-full">
                         <p className="text-xl font-bold text-center m-2 bg-base-200 rounded-md py-2"><Link to='/chat'>Send message</Link></p>
                         <p className="text-xl font-bold text-center m-2 bg-base-200 rounded-md py-2"><Link to={`tel:+88${author[2].mobile}`}>Call Seller</Link></p>
@@ -154,7 +154,7 @@ const AdsDetails = () => {
 
                     <p className="mt-4 font-bold">Description</p>
                     <div className="m-2 p-2 border border-base-200 max-w-[640px]">
-                        <textarea className="textarea text-sm font-semibold w-full min-h-[150px] h-full" style={{ resize: 'none' }} readOnly>{description}</textarea>
+                        <textarea className="textarea text-sm md:text-lg font-semibold w-full min-h-[150px] h-full" style={{ resize: 'none' }} readOnly>{description}</textarea>
                         <p></p>
                     </div>
                 </div>
@@ -172,7 +172,7 @@ const AdsDetails = () => {
                         </div>
                     ) : (
                         <div className="w-full">
-                            <p className="text-center">No ads available.</p>
+                            <p className="text-center">No similar ads available.</p>
                         </div>
                     )}
                 </div>

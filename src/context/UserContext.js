@@ -18,13 +18,13 @@ const UserContext = ({ children }) => {
     const [districts, setDistricts] = useState([])
     const [districtId, setDistrictId] = useState()
     const [areas, setAreas] = useState([])
-    
+
     // categories 
     const [categories, setCategories] = useState([])
     const [categoryId, setCategoryId] = useState()
     const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "http://localhost:5000"
+    const localUrl = "https://rustomexpress.vercel.app"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -139,7 +139,6 @@ const UserContext = ({ children }) => {
             const url = (`${localUrl}/user?email=${user.email}`)
             const response = await fetch(url)
             const json = await response.json()
-                .catch(error => console.log(error))
             setDbUser(json[0])
         }
         if (user) {
@@ -156,7 +155,7 @@ const UserContext = ({ children }) => {
     // get all post //
     //-------------//
 
-    
+
     const [ads, setAds] = useState([])
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
@@ -183,6 +182,42 @@ const UserContext = ({ children }) => {
     useEffect(() => {
         fetchData();
     }, []);
+    
+
+    // const fetchData = async (page = 1) => {
+    //     try {
+    //         const queryParams = new URLSearchParams();
+            
+    //         if (sortBy) {
+    //             queryParams.append('sortBy', sortBy);
+    //         }
+    
+    //         if (sortOrder) {
+    //             queryParams.append('sortOrder', sortOrder);
+    //         }
+    
+    //         if (limit) {
+    //             queryParams.append('limit', limit);
+    //         }
+    
+    //         if (page) {
+    //             queryParams.append('page', page);
+    //         }
+    
+    //         const response = await fetch(`${localUrl}/ads?${queryParams}`);
+    //         const data = await response.json();
+    //         setAds(data.items);
+    //         setTotalPages(data.totalPages);
+    //         setCurrentPage(page);
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //     }
+    // };
+    
+    // useEffect(() => {
+    //     fetchData();
+    // }, [sortBy, sortOrder, limit, page]);
+    
 
 
 
@@ -224,6 +259,7 @@ const UserContext = ({ children }) => {
         userLogin,
         googlePopUpLogin,
         user,
+        setUser,
         dbUser,
         loading,
         logOut
