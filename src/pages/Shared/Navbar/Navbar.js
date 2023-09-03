@@ -5,7 +5,7 @@ import AdPostModal from '../../Dashboard/AdPostModal/AdPostModal';
 import { AuthContext } from '../../../context/UserContext';
 
 const Navbar = () => {
-    const { user } = useContext(AuthContext)
+    const { user, setCategoryName, setSubCategory, setSearch } = useContext(AuthContext)
     const [theme, setTheme] = useState(
         localStorage.getItem("theme") ? localStorage.getItem("theme") : "light")
 
@@ -18,9 +18,14 @@ const Navbar = () => {
         const localTheme = localStorage.getItem("theme")
         document.querySelector('html').setAttribute('data-theme', localTheme)
     }, [theme])
+    const handleAllAds = () => {
+        setCategoryName('')
+        setSubCategory('')
+        setSearch('')
+    }
 
     const menu = <>
-        <li><Link to='/ads'>All Ads</Link></li>
+        <li onClick={handleAllAds}><Link to='/ads'>All Ads</Link></li>
         {
             user?.uid ?
                 <li><Link to='/chat'>Chat</Link></li>
@@ -45,7 +50,7 @@ const Navbar = () => {
                         {menu}
                     </ul>
                 </div>
-                <Link className="btn btn-ghost normal-case text-xl" to='/'>PIPIL</Link>
+                <Link className="btn btn-ghost normal-case text-xl" to='/'>RustomExpress</Link>
             </div>
             <div className="navbar-end">
                 <div className="hidden lg:flex">
@@ -53,7 +58,7 @@ const Navbar = () => {
                         {menu}
                     </ul>
                 </div>
-                <label htmlFor={user? `post_ad_modal`:`login_modal`} className="btn">Post Ad</label>
+                <label htmlFor={user ? `post_ad_modal` : `login_modal`} className="btn">Post Ad</label>
                 {/* <Link htmlFor="login_modal" className="btn">Post Ad</Link> */}
 
                 {/* toogle theme */}

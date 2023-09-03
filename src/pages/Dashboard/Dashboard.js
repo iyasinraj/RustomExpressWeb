@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../context/UserContext';
-import AdsCard from '../AdsPage.js/AdsPageComponents/AdsCard';
+import MyAdsCard from './AdsPageLayoutComponents/MyAdsCard';
 
 const Dashboard = () => {
     const { dbUser, user, localUrl } = useContext(AuthContext)
@@ -24,7 +24,7 @@ const Dashboard = () => {
     return (
         <div>
             <Helmet>
-                <title>Dashboard || PIPIL</title>
+                <title>Dashboard || RustomExpress</title>
             </Helmet>
             <div className='text-end font-bold md:text-2xl border-b'>
                 <p>{user?.displayName ? `Welcome ${user?.displayName}` : `Welcome ${dbUser?.name}`}</p>
@@ -40,7 +40,7 @@ const Dashboard = () => {
                         ) : myAds.length > 0 ? (
                             <div className="grid gap-4">
                                 {
-                                    myAds.map(ad => <AdsCard key={ad._id} singleAd={ad}></AdsCard>)
+                                    myAds.map(ad => <MyAdsCard key={ad._id} singleAd={ad}></MyAdsCard>)
                                 }
                             </div>
                         ) : (

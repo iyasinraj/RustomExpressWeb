@@ -1,22 +1,26 @@
 import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { AuthContext } from '../../../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
-    const {user, setUser, logOut} = useContext(AuthContext)
-    const handleLogOut = () => {
-        logOut()
-        .then( ()=> {
-            setUser(null)
-        })
-        .catch(error => {
-            console.error(error)
-        })
-    }
+    const { user, setUser, logOut } = useContext(AuthContext)
+    const navigate = useNavigate()
+    const handleLogOut = async () => {
+        try {
+            await logOut();
+            setUser(null);
+            navigate('/')
+        } catch (error) {
+            console.error(error);
+        } finally{
+            navigate('/')
+        }
+    };
     return (
         <div>
             <Helmet>
-                <title>Settings || PIPIL</title>
+                <title>Settings || RustomExpress</title>
             </Helmet>
             <h2 className='md:text-2xl font-bold border-b'>Settings</h2>
             <div className='my-6 text-lg font-bold'>
@@ -34,21 +38,7 @@ const Settings = () => {
 
                     <div className='flex items-center mb-4'>
                         <p>E_Mail: </p>
-                        <input type="email" placeholder={user.email} className="ms-4 input input-bordered w-full" readOnly/>
-                    </div>
-
-                    <div className='flex items-center mb-4'>
-                        <p>Location: </p>
-                        <select className="ms-4 select select-bordered w-full">
-                            <option disabled selected>Select Division</option>
-                            <option>Han Solo</option>
-                            <option>Greedo</option>
-                        </select>
-                        <select className="ms-4 select select-bordered w-full">
-                            <option disabled selected>Select State</option>
-                            <option>Han Solo</option>
-                            <option>Greedo</option>
-                        </select>
+                        <input type="email" placeholder={user.email} className="ms-4 input input-bordered w-full" readOnly />
                     </div>
                 </div>
                 <br />

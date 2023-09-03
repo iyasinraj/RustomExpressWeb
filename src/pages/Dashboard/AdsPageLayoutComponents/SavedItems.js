@@ -6,7 +6,7 @@ const SavedItems = () => {
     return (
         <div className=''>
             <Helmet>
-                <title>Saved Items || PIPIL</title>
+                <title>Saved Items || RustomExpress</title>
             </Helmet>
             <p className='md:text-2xl font-bold border-b'>Saved Items</p>
 

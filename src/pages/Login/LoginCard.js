@@ -12,43 +12,39 @@ const LoginCard = ({ setMethod }) => {
     const navigate = useNavigate()
     const from = location.state?.from?.pathname || '/'
 
-    const handleLogin = (data) => {
-        setLoginError('')
-        userLogin(data.email, data.password)
-            .then(result => {
-                // const user = result.user;
-                toast.success('Log in Successfully')
-                // close modal
-                const modalCheckbox = document.getElementById('login_modal');
-                if (modalCheckbox) {
-                    modalCheckbox.checked = false;
-                }
-                navigate(from, { replace: true })
-            })
-            .catch(error => {
-                setLoginError(error.message.split('/')[1])
+    const handleLogin = async (data) => {
+        try {
+            setLoginError('');
+            const result = await userLogin(data.email, data.password);
+            const user = result.user;
+            toast.success('Log in Successfully');
+            // close modal
+            const modalCheckbox = document.getElementById('login_modal');
+            if (modalCheckbox) {
+                modalCheckbox.checked = false;
+            }
+            navigate(from, { replace: true });
+        } catch (error) {
+            setLoginError(error.message.split('/')[1]);
+        }
+    };
 
-            })
-    }
-    const handleGooglePopUpLogin = () => {
-        googlePopUpLogin()
-            .then(result => {
-                // const user = result.user
-                
-                // close modal
-                const modalCheckbox = document.getElementById('login_modal');
-                if (modalCheckbox) {
-                    modalCheckbox.checked = false;
-                }
-                toast.success('Login successfull')
+    const handleGooglePopUpLogin = async () => {
+        try {
+            const result = await googlePopUpLogin();
+            const user = result.user;
+            // close modal
+            const modalCheckbox = document.getElementById('login_modal');
+            if (modalCheckbox) {
+                modalCheckbox.checked = false;
+            }
+            toast.success('Login successful');
+        } catch (err) {
+            console.log(err);
+            setLoginError(err.message.split('/')[1]);
+        }
+    };
 
-            })
-            .catch(err => {
-                console.log(err)
-                setLoginError(err.message.split('/')[1])
-            })
-
-    }
     return (
         <div className="hero">
             <div className="hero-content flex-col lg:flex-row-reverse">

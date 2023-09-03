@@ -1,6 +1,7 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from '../firebase/firebase.config'
+import { toast } from 'react-hot-toast';
 
 export const AuthContext = createContext()
 const auth = getAuth(app)
@@ -16,6 +17,7 @@ const UserContext = ({ children }) => {
     const [divisionId, setDivisionId] = useState()
     const [selectedDivision, setSelectedDivision] = useState()
     const [districts, setDistricts] = useState([])
+    const [selectedState, setSelectedState] = useState()
     const [districtId, setDistrictId] = useState()
     const [areas, setAreas] = useState([])
 
@@ -24,7 +26,7 @@ const UserContext = ({ children }) => {
     const [categoryId, setCategoryId] = useState()
     const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "https://rustomexpress.vercel.app"
+    const localUrl = "http://192.168.0.103:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -65,6 +67,7 @@ const UserContext = ({ children }) => {
         const name = value.split(",")[0]
         const id = value.split(",")[1]
         setLocatoin(name)
+        setSelectedState(name)
         setDistrictId(id)
     }
     // area selection part
@@ -90,7 +93,9 @@ const UserContext = ({ children }) => {
     useEffect(() => {
         fetch(`${localUrl}/categories`)
             .then(res => res.json())
-            .then(data => setCategories(data))
+            .then(data => {
+                setCategories(data)
+            })
     }, [])
 
     //---------------------------------//
@@ -142,7 +147,7 @@ const UserContext = ({ children }) => {
             setDbUser(json[0])
         }
         if (user) {
-            return fetchData()
+            fetchData()
         }
     }, [user])
 
@@ -154,14 +159,20 @@ const UserContext = ({ children }) => {
     //---------------//
     // get all post //
     //-------------//
-
+    const handleSearch = (e) =>{
+        setSearch(e.target.value)
+    }
 
     const [ads, setAds] = useState([])
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [categoryName, setCategoryName] = useState('')
-
-    const fetchData = async (page = 1) => {
+    const [subCategory, setSubCategory] = useState('')
+    const [selectedArea, setSelectedArea] = useState('')
+    const [search, setSearch] = useState('')
+    const [adsLoading, setAdsLoading] = useState(true)
+    const fetchData = useCallback(async (page = 1) => {
+        setAdsLoading(true)
         try {
             const queryParams = new URLSearchParams({
                 sortBy: 'createdAt',
@@ -169,59 +180,77 @@ const UserContext = ({ children }) => {
                 limit: 10,
                 page: page,
             });
+            
+            if (subCategory) {
+                setCategoryName('')
+                queryParams.append('subCategory', subCategory);
+            }
+            if (categoryName) {
+                setSubCategory('')
+                queryParams.append('category', categoryName);
+            }
+            if (selectedDivision) {
+                setSelectedState('')
+                setSelectedArea('')
+                queryParams.append('division', selectedDivision);
+            }
+            if (selectedState) {
+                setSelectedDivision('')
+                queryParams.append('state', selectedState);
+            }
+            if (selectedArea) {
+                setSelectedDivision('')
+                setSelectedState('')
+                queryParams.append('area', selectedArea);
+
+            }
+            if (search) {
+                setCategoryName('')
+                setSubCategory('')
+                setSelectedDivision('')
+                setSelectedState('')
+                setSelectedArea('')
+                queryParams.append('search', search);
+            }
+
 
             const response = await fetch(`${localUrl}/ads?${queryParams}`);
             const data = await response.json();
             setAds(data.items); // Set the data to ads instead of items
             setTotalPages(data.totalPages);
             setCurrentPage(page);
+            setAdsLoading(false)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
-    };
+    }, [localUrl, categoryName, setAds, setTotalPages, setCurrentPage, subCategory, selectedDivision, selectedState, selectedArea, search]);
     useEffect(() => {
         fetchData();
-    }, []);
-    
+    }, [fetchData]);
 
-    // const fetchData = async (page = 1) => {
-    //     try {
-    //         const queryParams = new URLSearchParams();
-            
-    //         if (sortBy) {
-    //             queryParams.append('sortBy', sortBy);
-    //         }
+    // delete post
     
-    //         if (sortOrder) {
-    //             queryParams.append('sortOrder', sortOrder);
-    //         }
-    
-    //         if (limit) {
-    //             queryParams.append('limit', limit);
-    //         }
-    
-    //         if (page) {
-    //             queryParams.append('page', page);
-    //         }
-    
-    //         const response = await fetch(`${localUrl}/ads?${queryParams}`);
-    //         const data = await response.json();
-    //         setAds(data.items);
-    //         setTotalPages(data.totalPages);
-    //         setCurrentPage(page);
-    //     } catch (error) {
-    //         console.error('Error fetching data:', error);
-    //     }
-    // };
-    
-    // useEffect(() => {
-    //     fetchData();
-    // }, [sortBy, sortOrder, limit, page]);
-    
-
-
-
-
+    const [deleteId, setDeleteId] = useState()
+    const [remainingMyAds, setRemainingMyAds] = useState()
+    // console.log(deleteId)
+    const handleDeletePost = async () => {
+        try {
+             const res = await fetch(`${localUrl}/ad/${deleteId}` , {
+                method: 'DELETE'
+             });
+             const data = await res.json();
+             console.log(deleteId, data)
+             if(data.deletedCount > 0){
+                const modalCheckbox = document.getElementById('deleteModal');
+                    if (modalCheckbox) {
+                        modalCheckbox.checked = false;
+                    }
+                 toast.success('Post Deleted Successfully')
+             }
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
 
 
@@ -229,6 +258,9 @@ const UserContext = ({ children }) => {
     const authInfo = {
         ads,
         setAds,
+        deleteId, setDeleteId,
+        handleDeletePost,
+        remainingMyAds, setRemainingMyAds,
         fetchData,
         currentPage,
         totalPages,
@@ -251,9 +283,14 @@ const UserContext = ({ children }) => {
         handleChange,
         handleChangeDis,
         handleChangeArea,
-        categories, subCategories, setSubCategories,
+        categories,
+        subCategories,
+        setSubCategories,
         categoryId, setCategoryId,
         categoryName, setCategoryName,
+        subCategory, setSubCategory,
+        setSearch,
+        handleSearch,
         createUser,
         updateUser,
         userLogin,
@@ -262,6 +299,7 @@ const UserContext = ({ children }) => {
         setUser,
         dbUser,
         loading,
+        adsLoading,
         logOut
     }
     return (

@@ -13,7 +13,7 @@ import AdsDetails from "../pages/AdsPage.js/AdDetails";
 import ChatPageLayout from "../layouts/ChatPageLayout";
 import PrivateRoute from "./PrivateRoute";
 
-const url = 'https://rustomexpress.vercel.app'
+const url = 'http://192.168.0.103:5000'
 export const routes = createBrowserRouter([
     {
         path: '/',
@@ -21,6 +21,10 @@ export const routes = createBrowserRouter([
         children: [
             {
                 path: '/',
+                element: <Home></Home>
+            },
+            {
+                path: '/*',
                 element: <Home></Home>
             },
             {

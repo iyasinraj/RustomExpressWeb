@@ -41,7 +41,8 @@ const Register = ({ setMethod }) => {
     const handleGooglePopUpLogin = () => {
         googlePopUpLogin()
             .then(result => {
-                // const user = result.user
+                const user = result.user
+                saveUser(user.displayName, user.email, '')
                 // close modal
                 const modalCheckbox = document.getElementById('login_modal');
                 if (modalCheckbox) {
@@ -64,6 +65,7 @@ const Register = ({ setMethod }) => {
             profile: '' ,
             status: 'active',
             role: 'user',
+            likedAds: [],
             createdAt: Date.now()
         }
         fetch(`${localUrl}/users`, {
@@ -88,10 +90,7 @@ const Register = ({ setMethod }) => {
                 </div>
                 <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <div className="card-body">
-
-                        
                         <form action="" onSubmit={handleSubmit(handleRegister)}
-
                         >
                             <div className="form-control">
                                 <label className="label">

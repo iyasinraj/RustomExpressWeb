@@ -95,7 +95,6 @@ const AdPostModal = () => {
         } catch (error) {
             console.error('Error uploading images:', error);
         }
-
     }
     const postAd = (title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number) => {
         const post = {
@@ -104,6 +103,7 @@ const AdPostModal = () => {
             price: price,
             condition: condition,
             postStatus: "available",
+            savedPosts: [],
             additionalLink: link,
             images: images,
             location: [
