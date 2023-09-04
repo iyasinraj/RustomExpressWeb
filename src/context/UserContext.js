@@ -26,7 +26,8 @@ const UserContext = ({ children }) => {
     const [categoryId, setCategoryId] = useState()
     const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "http://192.168.0.103:5000"
+    const localUrl = "https://rustomexpress.vercel.app"
+    // const localUrl = "http://192.168.0.103:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -141,12 +142,13 @@ const UserContext = ({ children }) => {
     // user info from database 
     useEffect(() => {
         const fetchData = async () => {
-            const url = (`${localUrl}/user?email=${user.email}`)
+            const email = await user.email
+            const url = (`${localUrl}/user/${email}`)
             const response = await fetch(url)
             const json = await response.json()
-            setDbUser(json[0])
+            setDbUser(json)
         }
-        if (user) {
+        if(user){
             fetchData()
         }
     }, [user])
@@ -159,7 +161,7 @@ const UserContext = ({ children }) => {
     //---------------//
     // get all post //
     //-------------//
-    const handleSearch = (e) =>{
+    const handleSearch = (e) => {
         setSearch(e.target.value)
     }
 
@@ -180,7 +182,7 @@ const UserContext = ({ children }) => {
                 limit: 10,
                 page: page,
             });
-            
+
             if (subCategory) {
                 setCategoryName('')
                 queryParams.append('subCategory', subCategory);
@@ -212,8 +214,6 @@ const UserContext = ({ children }) => {
                 setSelectedArea('')
                 queryParams.append('search', search);
             }
-
-
             const response = await fetch(`${localUrl}/ads?${queryParams}`);
             const data = await response.json();
             setAds(data.items); // Set the data to ads instead of items
@@ -229,24 +229,24 @@ const UserContext = ({ children }) => {
     }, [fetchData]);
 
     // delete post
-    
+
     const [deleteId, setDeleteId] = useState()
     const [remainingMyAds, setRemainingMyAds] = useState()
     // console.log(deleteId)
     const handleDeletePost = async () => {
         try {
-             const res = await fetch(`${localUrl}/ad/${deleteId}` , {
+            const res = await fetch(`${localUrl}/ad/${deleteId}`, {
                 method: 'DELETE'
-             });
-             const data = await res.json();
-             console.log(deleteId, data)
-             if(data.deletedCount > 0){
+            });
+            const data = await res.json();
+            console.log(deleteId, data)
+            if (data.deletedCount > 0) {
                 const modalCheckbox = document.getElementById('deleteModal');
-                    if (modalCheckbox) {
-                        modalCheckbox.checked = false;
-                    }
-                 toast.success('Post Deleted Successfully')
-             }
+                if (modalCheckbox) {
+                    modalCheckbox.checked = false;
+                }
+                toast.success('Post Deleted Successfully')
+            }
         } catch (error) {
             console.error(error)
         }

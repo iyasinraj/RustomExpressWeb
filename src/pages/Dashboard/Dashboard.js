@@ -27,7 +27,7 @@ const Dashboard = () => {
                 <title>Dashboard || RustomExpress</title>
             </Helmet>
             <div className='text-end font-bold md:text-2xl border-b'>
-                <p>{user?.displayName ? `Welcome ${user?.displayName}` : `Welcome ${dbUser?.name}`}</p>
+                <p>{dbUser?.name ? `Welcome ${dbUser?.name}` : `Welcome ${user?.displayName}`}</p>
             </div>
             <div className='my-6'>
                 <p className='text-center md:text-2xl font-bold'>My Ads</p>

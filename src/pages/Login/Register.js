@@ -69,7 +69,7 @@ const Register = ({ setMethod }) => {
             createdAt: Date.now()
         }
         fetch(`${localUrl}/users`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'content-type' : 'application/json'
             },
@@ -111,7 +111,7 @@ const Register = ({ setMethod }) => {
                                 <label className="label">
                                     <span className="label-text">Mobile *</span>
                                 </label>
-                                <input type="number" {...register("number", { required: true, minLength: 11, maxminLength: 14 })} className="input input-bordered" required />
+                                <input type="number" {...register("number", { required: true, minLength: 11, maxLength: 14 })} className="input input-bordered" required />
                             </div>
 
                             <div className="form-control">

@@ -167,7 +167,7 @@ const AdsDetails = () => {
                             <span className="loading loading-dots loading-lg"></span>
                         </div>
                     ) : similarAds.length > 0 ? (
-                        <div className="grid grid-cols-2">
+                        <div className="grid md:grid-cols-2">
                             { similarAds.map(ad => <AdsCard key={ad._id} singleAd={ad}></AdsCard>)}
                         </div>
                     ) : (
