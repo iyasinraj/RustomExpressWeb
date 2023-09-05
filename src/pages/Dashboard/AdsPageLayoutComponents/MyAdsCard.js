@@ -37,13 +37,13 @@ const MyAdsCard = ({ singleAd }) => {
             const price = data.price
             const condition = data.condition
             const link = data.link
-            const number = data.number
-            update(title, description, price, condition, link, number)
+            const mobile = data.mobile
+            update(title, description, price, condition, link, mobile)
         } catch (error) {
             console.error('Error uploading images:', error);
         }
     }
-    const update = (title, description, price, condition, link, number) => {
+    const update = async (title, description, price, condition, link, mobile) => {
         const post = {
             title: title,
             description: description,
@@ -51,12 +51,11 @@ const MyAdsCard = ({ singleAd }) => {
             condition: condition,
             postStatus: "available",
             additionalLink: link,
-            author: [
-                { mobile: number }
-            ],
+            mobile: mobile
+            
         }
         fetch(`${localUrl}/ad/${singleAd._id}`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'content-type': 'application/json'
             },
@@ -64,7 +63,6 @@ const MyAdsCard = ({ singleAd }) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.modifiedCount > 0) {
                     // close modal
                     const modalCheckbox = document.getElementById('updateModal');
@@ -135,7 +133,7 @@ const MyAdsCard = ({ singleAd }) => {
                         {errors.price?.type === 'required' && <p className="text-red-600" role="alert">Price is required</p>}
 
                         <h2 className='text-xl font-bold my-4'>Mobile Number</h2>
-                        <input type="number" defaultValue={singleAd.author[2].mobile} {...register("number", { required: true })} placeholder="Mobile Number" className="input input-bordered w-full" />
+                        <input type="number" defaultValue={singleAd.author[2].mobile} {...register("mobile", { required: true })} placeholder="Mobile Number" className="input input-bordered w-full" />
                         {errors.number && <p className="text-red-600" role="alert">Number is required</p>}
 
                         <h2 className='text-xl font-bold my-4'>Additional Link (Optional)</h2>

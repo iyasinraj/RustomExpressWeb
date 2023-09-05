@@ -43,7 +43,6 @@ const Settings = () => {
             if(data.modifiedCount > 0){
                 toast.success('Successfully Updated')
             }
-            
         })
     }
 

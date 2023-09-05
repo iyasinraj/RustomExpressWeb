@@ -26,7 +26,7 @@ const UserContext = ({ children }) => {
     const [categoryId, setCategoryId] = useState()
     const [subCategories, setSubCategories] = useState([])
 
-    const localUrl = "https://rustomexpress.vercel.app"
+    const localUrl = "https://saepciure.rustomexpress.com"
     // const localUrl = "http://192.168.0.103:5000"
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -142,11 +142,11 @@ const UserContext = ({ children }) => {
     // user info from database 
     useEffect(() => {
         const fetchData = async () => {
-            const email = await user.email
-            const url = (`${localUrl}/user/${email}`)
-            const response = await fetch(url)
-            const json = await response.json()
-            setDbUser(json)
+            const email = await user.email;
+            const url = (`${localUrl}/user/${email}`);
+            const response = await fetch(url);
+            const json = await response.json();
+            setDbUser(json);
         }
         if(user){
             fetchData()
@@ -232,7 +232,7 @@ const UserContext = ({ children }) => {
 
     const [deleteId, setDeleteId] = useState()
     const [remainingMyAds, setRemainingMyAds] = useState()
-    // console.log(deleteId)
+    const [count, setCount] =useState(0)
     const handleDeletePost = async () => {
         try {
             const res = await fetch(`${localUrl}/ad/${deleteId}`, {
@@ -241,6 +241,7 @@ const UserContext = ({ children }) => {
             const data = await res.json();
             console.log(deleteId, data)
             if (data.deletedCount > 0) {
+                setCount(count+1)
                 const modalCheckbox = document.getElementById('deleteModal');
                 if (modalCheckbox) {
                     modalCheckbox.checked = false;
@@ -260,6 +261,7 @@ const UserContext = ({ children }) => {
         setAds,
         deleteId, setDeleteId,
         handleDeletePost,
+        count,
         remainingMyAds, setRemainingMyAds,
         fetchData,
         currentPage,
@@ -300,6 +302,7 @@ const UserContext = ({ children }) => {
         dbUser,
         loading,
         adsLoading,
+        setAdsLoading,
         logOut
     }
     return (

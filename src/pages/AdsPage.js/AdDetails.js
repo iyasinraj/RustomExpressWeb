@@ -9,12 +9,12 @@ import {
     WhatsappIcon, WhatsappShareButton
 } from "react-share";
 import AdsCard from "./AdsPageComponents/AdsCard";
+import { toast } from "react-hot-toast";
 
 const AdsDetails = () => {
-    const { selectedDivision, localUrl } = useContext(AuthContext)
+    const { selectedDivision, dbUser, user, localUrl } = useContext(AuthContext)
     const post = useLoaderData()
     const { title, description, price, createdAt, location, condition, category, author, images } = post
-
 
     const date = new Date(createdAt);
     const year = date.getFullYear();
@@ -25,12 +25,6 @@ const AdsDetails = () => {
 
     const [isCopied, setIsCopied] = useState(false);
     const url = window.location.href
-
-    // save post
-    const [save, setSave] = useState(false)
-    const handleSavePost = () => {
-        setSave(!save)
-    }
 
     const handleCopyClick = () => {
         navigator.clipboard.writeText(url).then(() => {
@@ -55,6 +49,77 @@ const AdsDetails = () => {
                 setLoading(false); // Set loading to false if there's an error
             });
     }, [category, localUrl]);
+
+
+    //  save or remove post
+    const [isSaved, setIsSaved] = useState(false);
+    const [likedAds, setLikedAds] = useState([])
+
+    // check product id is saved or not
+    useEffect(() => {
+        if (dbUser && dbUser.likedAds && post._id) {
+            const checkIsSaved = () => {
+                const array = dbUser.likedAds;
+                if (array.includes(post._id)) {
+                    setIsSaved(true);
+                    setLikedAds(array);
+                } else {
+                    setIsSaved(false);
+                    setLikedAds(array);
+                }
+            };
+            checkIsSaved();
+        }
+    }, [dbUser, dbUser.likedAds, post._id]);
+
+    const handleSaveClick = () => {
+        if (user && dbUser && post._id) {
+            try {
+               
+                setLikedAds((prevLikedAds) => {
+                    if (prevLikedAds.includes(post._id)) {
+                        // If the button ID is already in the array, remove it
+                        const updatedArray = prevLikedAds.filter((id) => id !== post._id);
+                        updateArrayInUser(updatedArray);
+                        return updatedArray;
+                    } else {
+                        // If the button ID is not in the array, add it
+                        const updatedArray = [...prevLikedAds, post._id];
+                        updateArrayInUser(updatedArray);
+                        return updatedArray;
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        } 
+    };
+    const updateArrayInUser = (likedAds) => {
+        const info = {
+            likedAds: likedAds
+        }
+        fetch(`${localUrl}/user/array/${dbUser._id}`, {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                if(data.modifiedCount > 0){
+                    if(isSaved){
+                        toast.success('Removed')
+                    }else{
+                        toast.success('Saved')
+                    }
+                }
+            })
+    }
+
+
+
 
     return (
         <div className="">
@@ -130,10 +195,11 @@ const AdsDetails = () => {
                                         </li>
                                     </ul>
                                 </div>
+
                                 <div className="">
-                                    <label onClick={handleSavePost} className="btn btn-sm p-0 pr-3 md:pr-1 grid gap-0 grid-cols-2 md:flex md:tooltip m-1" data-tip="Save this post">
+                                    <label onClick={handleSaveClick} className="btn btn-sm p-0 pr-3 md:pr-1 grid gap-0 grid-cols-2 md:flex md:tooltip m-1" data-tip="Save this post">
                                         {
-                                            save ?
+                                            isSaved ?
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="#FFFF00" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-6 h-6">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                                                 </svg>
@@ -142,7 +208,7 @@ const AdsDetails = () => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                                                 </svg>
                                         }
-                                        <span className="text-[8px] md:text-sm">Save</span>
+                                        <span className="text-[8px] md:text-sm">{isSaved ? "Saved" : "Save"}</span>
                                     </label>
                                 </div>
                             </div>
@@ -168,7 +234,7 @@ const AdsDetails = () => {
                         </div>
                     ) : similarAds.length > 0 ? (
                         <div className="grid md:grid-cols-2">
-                            { similarAds.map(ad => <AdsCard key={ad._id} singleAd={ad}></AdsCard>)}
+                            {similarAds.map(ad => <AdsCard key={ad._id} singleAd={ad}></AdsCard>)}
                         </div>
                     ) : (
                         <div className="w-full">

@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 
 const LoginCard = ({ setMethod }) => {
     const { register, handleSubmit } = useForm()
-    const { userLogin, googlePopUpLogin } = useContext(AuthContext)
+    const { userLogin, googlePopUpLogin, localUrl } = useContext(AuthContext)
     const [loginError, setLoginError] = useState('')
     const location = useLocation()
     const navigate = useNavigate()
@@ -29,10 +29,12 @@ const LoginCard = ({ setMethod }) => {
         }
     };
 
+
     const handleGooglePopUpLogin = async () => {
         try {
             const result = await googlePopUpLogin();
             const user = result.user;
+            saveUser(user.displayName, user.email, '')
             // close modal
             const modalCheckbox = document.getElementById('login_modal');
             if (modalCheckbox) {
@@ -44,6 +46,30 @@ const LoginCard = ({ setMethod }) => {
             setLoginError(err.message.split('/')[1]);
         }
     };
+
+    const saveUser = (name, email, number) => {
+        const user = {
+            name: name,
+            email: email,
+            mobile: number,
+            profile: '',
+            status: 'active',
+            role: 'user',
+            likedAds: [],
+            createdAt: Date.now()
+        }
+        fetch(`${localUrl}/userlogin`, {
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
+    }
 
     return (
         <div className="hero">
