@@ -92,7 +92,12 @@ const AdsDetails = () => {
             } catch (error) {
                 console.error(error);
             }
-        } 
+        } else {
+            const modalCheckbox = document.getElementById('login_modal');
+            if (modalCheckbox) {
+                modalCheckbox.checked = true;
+            }
+        }
     };
     const updateArrayInUser = (likedAds) => {
         const info = {
