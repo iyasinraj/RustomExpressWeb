@@ -11,8 +11,8 @@ const Home = () => {
       </Helmet>
 
       <Hero></Hero>
-      <h2 className='text-center text-2xl font-bold'>Items Category</h2>
-      <div className='my-20'>
+      <h2 className='text-center text-2xl md:text-3xl font-bold'>Items Category</h2>
+      <div className='my-2'>
         <Categories></Categories>
       </div>
       <div className='my-20'>

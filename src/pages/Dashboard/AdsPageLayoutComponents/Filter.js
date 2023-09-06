@@ -6,13 +6,10 @@ const ShortList = () => {
     const { categories, setCategoryName, setSubCategory, subCategories, setSubCategories, setCategoryId } = useContext(AuthContext)
 
     const subCatChange = async ( name, id) => {
-        setCategoryName(name)
-        setCategoryId(id)
+        await setCategoryName(name)
+        await setCategoryId(id)
         const subcat = await categories.filter(category => category.id === id)
         await setSubCategories(subcat[0].subCategories)
-    }
-    const setSubcat = (name) => {
-        setSubCategory(name)
     }
     return (
         <div>
@@ -31,7 +28,7 @@ const ShortList = () => {
                         <p className='border-b text-center font-bold mt-8 rounded-md'>Find With Product Sub-Category</p>
                         <div className='mt-4'>
                             {
-                                subCategories.map((subCategory, i) => <p className='my-2 font-semibold' key={i} onClick={() => setSubcat(subCategory.name)}> <Link>{subCategory.name}</Link></p>)
+                                subCategories.map((subCategory, i) => <p className='my-2 font-semibold' key={i} onClick={() => setSubCategory(subCategory.name)}> <Link>{subCategory.name}</Link></p>)
                             }
                         </div>
                     </div>

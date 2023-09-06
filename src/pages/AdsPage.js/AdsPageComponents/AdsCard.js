@@ -20,20 +20,19 @@ const AdsCard = ({ singleAd }) => {
         }
     }
     return (
-        <Link to={`/ads/${singleAd?._id}`} className="mx-4 h-[150px] md:h-[200px] rounded-md my-4 flex bg-base-100 hover:shadow-xl shadow-md">
-            <img className='w-1/3 rounded-l-md' src={singleAd?.images[0]} alt="productImage" />
+        <Link to={`/ads/${singleAd?._id}`} className="mx-4 h-[120px] md:h-[200px] rounded-md my-4 flex bg-base-100 hover:shadow-xl shadow-md">
+            <img className='h-[120px] md:h-[200px] min-w-[150px] md:min-w-[300px] object-cover rounded-l-md' src={singleAd?.images[0]} alt="productImage" />
             <div className="ms-4 w-full p-2 flex flex-col content-between">
                 <div className='h-full flex flex-col justify-between'>
-                    <h2 className="font-bold">{singleAd?.title}</h2>
-                    <p>{singleAd?.location[1].state}, {singleAd?.location[2].area}</p>
-                    <p className='font-extrabold'>TK: {singleAd?.price} </p>
+                    <h2 className="text-sm md:text-xl font-bold">{singleAd?.title}</h2>
+                    <p className='text-xs md:text-lg'>{singleAd?.location[1].state}, {singleAd?.location[2].area}</p>
+                    <p className=' text-sm md:text-xl font-extrabold'>TK: {singleAd?.price} </p>
                 </div>
                 <div className="h-full flex justify-end items-end">
-                    <p className='text-end pe-4'>{formatTimeDifference(differenceInMinutes)} ago.</p>
+                    <p className='text-xs md:text-lg text-end pe-4'>{formatTimeDifference(differenceInMinutes)} ago.</p>
                 </div>
             </div>
         </Link>
-
     );
 };
 

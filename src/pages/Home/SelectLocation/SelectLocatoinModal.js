@@ -19,14 +19,14 @@ const {
 
     return (
         <div className='text-center'>
-            <label htmlFor="location_modal" className="text-2xl font-semibold hover:font-bold flex items-center justify-center">{locationIcon} <span>{location}</span></label>
+            {/* <label htmlFor="location_modal" className="text-2xl font-semibold hover:font-bold flex items-center justify-center">{locationIcon} <span>{location}</span></label> */}
 
             <div>
                 <input type="checkbox" id="location_modal" className="modal-toggle" />
                 <div className="modal">
                     <div className="modal-box w-full">
                         
-                    <div className="my-20">
+                    <div className="my-10">
                             <h4 className="text-2xl font-bold flex items-center justify-center">{locationIcon} <span>{location}</span></h4>
                         </div>
 
