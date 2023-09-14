@@ -1,8 +1,7 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, Navigate, useLoaderData } from "react-router-dom";
 import Carousel from "./AdDetailsComponents/Carousel";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/UserContext";
-
 import {
     EmailIcon, EmailShareButton, FacebookIcon, FacebookMessengerIcon,
     FacebookMessengerShareButton, FacebookShareButton, TwitterIcon, TwitterShareButton,
@@ -12,9 +11,9 @@ import AdsCard from "./AdsPageComponents/AdsCard";
 import { toast } from "react-hot-toast";
 
 const AdsDetails = () => {
-    const { selectedDivision, dbUser, user, localUrl } = useContext(AuthContext)
+    const { selectedDivision, dbUser, user, localUrl, sendMessage, setActiveChat } = useContext(AuthContext)
     const post = useLoaderData()
-    const { title, description, price, createdAt, location, condition, category, author, images } = post
+    const { title, _id, description, price, createdAt, location, condition, category, author, images } = post
 
     const date = new Date(createdAt);
     const year = date.getFullYear();
@@ -35,18 +34,18 @@ const AdsDetails = () => {
 
     const [similarAds, setSimilarAds] = useState([])
     const [loading, setLoading] = useState(true);
-
+    // similar ads
     useEffect(() => {
-        setLoading(true); // Set loading to true before fetching data
+        setLoading(true);
         fetch(`${localUrl}/ads?category=${category[0]?.category}&limit=4`)
             .then(res => res.json())
             .then(data => {
                 setSimilarAds(data.items);
-                setLoading(false); // Set loading to false after data is fetched
+                setLoading(false);
             })
             .catch(error => {
                 console.error(error);
-                setLoading(false); // Set loading to false if there's an error
+                setLoading(false);
             });
     }, [category, localUrl]);
 
@@ -75,7 +74,7 @@ const AdsDetails = () => {
     const handleSaveClick = () => {
         if (user && dbUser && post._id) {
             try {
-               
+
                 setLikedAds((prevLikedAds) => {
                     if (prevLikedAds.includes(post._id)) {
                         // If the button ID is already in the array, remove it
@@ -112,17 +111,21 @@ const AdsDetails = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                if(data.modifiedCount > 0){
-                    if(isSaved){
+                // console.log(data)
+                if (data.modifiedCount > 0) {
+                    if (isSaved) {
                         toast.success('Removed')
-                    }else{
+                    } else {
                         toast.success('Saved')
                     }
                 }
             })
     }
 
+    const handleSendMessage = () => {
+        sendMessage(author[3]?.id, author[0].name, author[1].email, _id )
+        setActiveChat(_id)
+    }
 
 
 
@@ -139,14 +142,19 @@ const AdsDetails = () => {
                     </div>
                     <p className="font-light my-2">Sale by: {author[0]?.name}</p>
                     <div className="grid grid-cols-2 w-full">
-                        <p className="text-xl font-bold text-center m-2 bg-base-200 rounded-md py-2"><Link to='/chat'>Send message</Link></p>
-                        <p className="text-xl font-bold text-center m-2 bg-base-200 rounded-md py-2"><Link to={`tel:+88${author[2].mobile}`}>Call Seller</Link></p>
+                        {/* <p className="text-xl font-bold text-center m-2 bg-base-200 rounded-md py-2">
+                            <Link to={`/chat/${_id}`} onClick={handleSendMessage}
+                            >Send message</Link>
+                        </p> */}
+                        <p className="text-xl col-span-2 font-bold text-center m-2 bg-base-200 rounded-md py-2 tooltip"  data-tip={`+88${author[2].mobile}`}>
+                            <Link to={`tel:+88${author[2].mobile}`}>Call Seller</Link>
+                        </p>
                     </div>
 
                     {/* for Pc Screen Paid Ads */}
-                    <div className="hidden md:block m-4 bg-base-200 h-full">
+                    {/* <div className="hidden md:block m-4 bg-base-200 h-full">
                         <p className="text-center font-bold py-24">Contact for ad</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="px-2 md:px-0 md:grid grid-cols-5">

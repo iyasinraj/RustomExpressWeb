@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import app from '../firebase/firebase.config'
 import { toast } from 'react-hot-toast';
+import { io } from 'socket.io-client';
 
 export const AuthContext = createContext()
 const auth = getAuth(app)
@@ -27,7 +28,10 @@ const UserContext = ({ children }) => {
     const [subCategories, setSubCategories] = useState([])
 
     const localUrl = "https://saepciure.rustomexpress.com"
-    // const localUrl = "http://192.168.0.103:5000"
+    // const localUrl = "http://192.168.0.105:5000"
+    
+
+
 
     const locationIcon = <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -148,7 +152,7 @@ const UserContext = ({ children }) => {
             const json = await response.json();
             setDbUser(json);
         }
-        if(user){
+        if (user) {
             fetchData()
         }
     }, [user])
@@ -228,11 +232,18 @@ const UserContext = ({ children }) => {
         fetchData();
     }, [fetchData]);
 
+
+
+    // update post
+    const [modlAd, setModlAd] = useState(null);
+    const [updatePostId, setUpdatePostId] = useState();
+
+
     // delete post
 
     const [deleteId, setDeleteId] = useState()
     const [remainingMyAds, setRemainingMyAds] = useState()
-    const [count, setCount] =useState(0)
+    const [count, setCount] = useState(0)
     const handleDeletePost = async () => {
         try {
             const res = await fetch(`${localUrl}/ad/${deleteId}`, {
@@ -241,7 +252,7 @@ const UserContext = ({ children }) => {
             const data = await res.json();
             console.log(deleteId, data)
             if (data.deletedCount > 0) {
-                setCount(count+1)
+                setCount(count + 1)
                 const modalCheckbox = document.getElementById('deleteModal');
                 if (modalCheckbox) {
                     modalCheckbox.checked = false;
@@ -254,14 +265,72 @@ const UserContext = ({ children }) => {
     }
 
 
+    // Chat Features
+    // senderId, senderName, senderEmail, receiverId, receiverName, receiverEmail, productId, content
+    const [activeChat, setActiveChat] = useState(null)
+    const [tempChat, setTempChat] = useState(null)
+    const [chats, setChats] = useState([])
+    const [chat, setChat] = useState([])
+    const [content, setContent] = useState("")
 
 
+    const sendMessage = async (id, userName, email, productId) => {
+        const chat = {
+            senderId: dbUser._id,
+            senderName: dbUser.name,
+            senderEmail: dbUser.email,
+            receiverId: id,
+            receiverName: userName,
+            receiverEmail: email,
+            productId: productId,
+            content: content,
+        }
+        setTempChat(chat)
+        // console.log(chat)
+    }
+
+    const saveToDB = async (chat) => {
+        await fetch(`${localUrl}/chats`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(chat)
+        })
+            .then(res => res.json())
+            .then(data => {
+                // console.log(data)
+                if (data.acknowledged) {
+                    setContent(null)
+                }
+            })
+    }
+    useEffect(() => {
+        if (content.length > 0) {
+            console.log('from if section')
+            if(activeChat){
+                saveToDB(activeChat)
+            }else{
+                saveToDB(tempChat)
+            }
+        }
+    }, [activeChat, content.length, tempChat])
+
+      
     const authInfo = {
+        sendMessage,
+        content, setContent,
+        chats, setChats,
+        chat, setChat,
+        tempChat, setTempChat,
+        activeChat, setActiveChat,
         ads,
         setAds,
         deleteId, setDeleteId,
+        updatePostId, setUpdatePostId,
+        modlAd, setModlAd,
         handleDeletePost,
-        count,
+        count, setCount,
         remainingMyAds, setRemainingMyAds,
         fetchData,
         currentPage,

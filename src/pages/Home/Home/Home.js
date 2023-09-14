@@ -12,7 +12,7 @@ const Home = () => {
 
       <Hero></Hero>
       <h2 className='text-center text-2xl md:text-3xl font-bold'>Items Category</h2>
-      <div className='my-2'>
+      <div className='my-6 md:my-20'>
         <Categories></Categories>
       </div>
       <div className='my-20'>

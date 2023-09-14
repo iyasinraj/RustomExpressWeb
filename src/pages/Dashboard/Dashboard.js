@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/UserContext';
 import MyAdsCard from './AdsPageLayoutComponents/MyAdsCard';
 
 const Dashboard = () => {
-    const { dbUser, user, localUrl, count } = useContext(AuthContext)
+    const { dbUser, user, localUrl, count, } = useContext(AuthContext)
     const [loading, setLoading] = useState(true);
     const email = user.email
     const [myAds, setMyAds] = useState([])

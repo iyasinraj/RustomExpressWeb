@@ -26,17 +26,25 @@ const Navbar = () => {
 
     const menu = <>
         <li onClick={handleAllAds}><Link to='/ads'>All Ads</Link></li>
-        {
+        {/* {
             user?.uid ?
                 <li><Link to='/chat'>Chat</Link></li>
                 :
                 <li>
                     <label htmlFor="login_modal" className="">Login</label>
                 </li>
-        }
+        } */}
         {
-            user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
+            user?.uid ?
+                <li><Link to='/dashboard'>Dashboard</Link></li>
+                :
+                <li>
+                    <label htmlFor="login_modal" className="">Login</label>
+                </li>
         }
+        {/* {
+            user?.uid && <li><Link to='/dashboard'>Dashboard</Link></li>
+        } */}
 
     </>
     return (

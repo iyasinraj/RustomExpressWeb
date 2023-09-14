@@ -42,7 +42,7 @@ const LoginCard = ({ setMethod }) => {
             }
             toast.success('Login successful');
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             setLoginError(err.message.split('/')[1]);
         }
     };
@@ -67,7 +67,7 @@ const LoginCard = ({ setMethod }) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                // console.log(data)
             })
     }
 

@@ -1,19 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const ChatHead = () => {
+const ChatHead = ({ productId, localUrl }) => {
+    const [ad, setAd] = useState()
+    useEffect(() => {
+        fetch(`${localUrl}/ad/${productId}`)
+            .then(res => res.json())
+            .then(data => {
+                setAd(data)
+            })
+    }, [localUrl, productId])
+    
     return (
-        <div className='flex border-b ms-4 ps-4 pb-4'>
-            <div className="avatar">
-                <div className="w-24 rounded-md">
-                    <img alt='img' src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fHww&w=1000&q=80" />
+        <div>
+            <Link to={`/ads/${productId}`}>
+            {
+                ad &&
+                <div className='flex border-b ms-4 ps-4 pb-4'>
+                    <div className="avatar">
+                        <div className="w-24 rounded-md">
+                            <img alt='img' src={ad?.images[0]} />
+                        </div>
+                    </div>
+                    <div className='ms-4'>
+                        <h3 className='text-2xl font-bold'>{ad.title}</h3>
+                        <p>{ad.location[2].area}, {ad.location[1].state} || { new Date (ad.createdAt).toDateString()}</p>
+                        <p className='font-bold'>TK: {ad.price}</p>
+                    </div>
                 </div>
-            </div>
-            <div className='ms-4'>
-                <h3 className='text-2xl font-bold'>Product Title</h3>
-                <p>Jurain, Dhaka || 10 aug 2023</p>
-                <p className='font-bold'>TK: 1000</p>
-            </div>
+            }
+            </Link>
         </div>
+
     );
 };
 

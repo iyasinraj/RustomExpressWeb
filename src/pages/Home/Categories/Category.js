@@ -16,7 +16,6 @@ const Category = ({category}) => {
         fetch(`${localUrl}/ads?category=${name}`)
         .then(res => res.json())
         .then(data => {
-            console.log(data.items)
             setItems(data.items)
         })
     },[localUrl, name])

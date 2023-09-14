@@ -12,9 +12,17 @@ import AdminHome from "../pages/Admin/AdminHome/AdminHome";
 import AdsDetails from "../pages/AdsPage.js/AdDetails";
 import ChatPageLayout from "../layouts/ChatPageLayout";
 import PrivateRoute from "./PrivateRoute";
+import Chat from "../pages/Chat/Chat";
+import Terms from "../pages/Legal/Terms";
+import Privacy from "../pages/Legal/Privacy";
+import Cookies from "../pages/Legal/Cookies";
+import Contact from "../pages/Company/Contact";
+import About from "../pages/Company/About";
+import Jobs from "../pages/Company/Jobs";
+import Blog from "../pages/Company/Blog";
 
 const url = 'https://saepciure.rustomexpress.com'
-// const url = "http://192.168.0.103:5000"
+// const url = "http://192.168.0.105:5000"
 export const routes = createBrowserRouter([
     {
         path: '/',
@@ -25,15 +33,49 @@ export const routes = createBrowserRouter([
                 element: <Home></Home>
             },
             {
+                path: '/terms',
+                element: <Terms></Terms>
+            },
+            {
+                path: '/privacy',
+                element: <Privacy></Privacy>
+            },
+            {
+                path: '/cookie',
+                element: <Cookies></Cookies>
+            },
+            {
+                path: '/contact',
+                element: <Contact></Contact>
+            },
+            {
+                path: '/about',
+                element: <About></About>
+            },
+            {
+                path: '/career/jobs',
+                element: <Jobs></Jobs>
+            },
+            {
+                path: '/blog',
+                element: <Blog></Blog>
+            },
+            {
                 path: '/ads/:id',
-                loader: async ({params}) => {
+                loader: async ({ params }) => {
                     return fetch(`${url}/ad/${params.id}`)
                 },
                 element: <AdsDetails></AdsDetails>
             },
             {
                 path: '/chat',
-                element:<PrivateRoute><ChatPageLayout></ChatPageLayout></PrivateRoute>
+                element: <PrivateRoute><ChatPageLayout></ChatPageLayout></PrivateRoute>,
+                children: [
+                    {
+                        path: '/chat/:id',
+                        element: <PrivateRoute><Chat></Chat></PrivateRoute>
+                    }
+                ]
             }
         ]
     },
@@ -42,15 +84,15 @@ export const routes = createBrowserRouter([
         element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
         children: [
             {
-                path:'/dashboard',
+                path: '/dashboard',
                 element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>
             },
             {
-                path:'/dashboard/settings',
-                element:<PrivateRoute><Settings></Settings></PrivateRoute>
+                path: '/dashboard/settings',
+                element: <PrivateRoute><Settings></Settings></PrivateRoute>
             },
             {
-                path:'/dashboard/saveditems',
+                path: '/dashboard/saveditems',
                 element: <PrivateRoute><SavedItems></SavedItems></PrivateRoute>
             },
         ]
@@ -58,7 +100,7 @@ export const routes = createBrowserRouter([
     {
         path: '/ads',
         element: <AdsPageLayout></AdsPageLayout>,
-        children:[
+        children: [
             {
                 path: '/ads',
                 element: <AdsPage></AdsPage>

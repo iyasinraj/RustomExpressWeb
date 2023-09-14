@@ -91,12 +91,13 @@ const AdPostModal = () => {
             const name = dbUser ? dbUser.name : user.displayName
             const email = user.email
             const number = data.number
-            postAd(title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number)
+            const id = dbUser._id
+            postAd(title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number, id)
         } catch (error) {
             console.error('Error uploading images:', error);
         }
     }
-    const postAd = (title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number) => {
+    const postAd = (title, description, price, condition, link, images, division, state, area, category, subCategory, model, name, email, number, id) => {
         const post = {
             title: title,
             description: description,
@@ -120,6 +121,7 @@ const AdPostModal = () => {
                 { name: name },
                 { email: email },
                 { mobile: number },
+                { id: id },
 
             ],
             createdAt: Date.now()

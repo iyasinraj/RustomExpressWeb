@@ -8,22 +8,21 @@ const Footer = () => {
                 <div>
                     <span className="footer-title">Services</span>
                     <Link className="link link-hover">Branding</Link>
-                    <Link className="link link-hover">Design</Link>
                     <Link className="link link-hover">Marketing</Link>
                     <Link className="link link-hover">Advertisement</Link>
                 </div>
                 <div>
                     <span className="footer-title">Company</span>
-                    <Link className="link link-hover">About us</Link>
-                    <Link className="link link-hover">Contact</Link>
-                    <Link className="link link-hover">Jobs</Link>
-                    <Link className="link link-hover">Press kit</Link>
+                    <Link to={'/about'} className="link link-hover">About us</Link>
+                    <Link to={'/contact'} className="link link-hover">Contact</Link>
+                    <Link to={'/career/jobs'} className="link link-hover">Jobs</Link>
+                    <Link to={'/blog'} className="link link-hover">Blog</Link>
                 </div>
                 <div>
                     <span className="footer-title">Legal</span>
-                    <Link className="link link-hover">Terms of use</Link>
-                    <Link className="link link-hover">Privacy policy</Link>
-                    <Link className="link link-hover">Cookie policy</Link>
+                    <Link to={'/terms'} className="link link-hover">Terms of use</Link>
+                    <Link to={'/privacy'} className="link link-hover">Privacy policy</Link>
+                    <Link to={'/cookie'} className="link link-hover">Cookie policy</Link>
                 </div>
             </footer>
             <hr />

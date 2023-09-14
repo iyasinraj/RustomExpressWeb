@@ -76,18 +76,17 @@ const Settings = () => {
                     <button className='btn mb-12' type='submit' >Update Details</button>
                 </form>
 
-                <p className='text-xl font-bold mb-4'>Change Password: </p>
+                {/* <p className='text-xl font-bold mb-4'>Change Password: </p>
                 <input type="text" placeholder="Current Password" className="input input-bordered w-full max-w-xs" />
                 <br />
                 <input type="text" placeholder="New Password" className="my-6 input input-bordered w-full max-w-xs" />
                 <br />
                 <input type="text" placeholder="New Password" className="input input-bordered w-full max-w-xs" />
-                <br />
-
+                <br /> 
                 <div className='border-b'>
                     <button className='btn my-6'>Update Password</button>
                 </div>
-
+                */}
                 <div className='mt-6'>
                     <button className={`btn mr-6`}>Delete Account</button>
                     <button className={`btn btn-error`} onClick={handleLogOut}>Log Out</button>

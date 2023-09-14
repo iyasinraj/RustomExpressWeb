@@ -52,7 +52,7 @@ const Register = ({ setMethod }) => {
 
             })
             .catch(err => {
-                console.log(err)
+                // console.log(err)
                 setSignUpError(err.message.split('/')[1])
             })
 
